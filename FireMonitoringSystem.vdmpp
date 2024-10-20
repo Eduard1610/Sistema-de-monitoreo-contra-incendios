@@ -1,0 +1,34 @@
+/**
+  FireMonitoringSystem.
+
+  <p>
+    Sistema de monitoreo que rastrea variables clave como la temperatura, 
+    la humedad del aire y otros factores meteorológicos (CO) para prevenir 
+    y gestionar incendios, en entornos forestales.
+  </p>
+
+  @version 1.0
+  @author
+    - Durand Obando Eduardo Franshua
+    - Franks
+    - César
+    - Italo
+*/
+
+class FireMonitoringSystem
+
+types
+
+values
+
+instance variables
+
+operations
+
+-- constructor for FireMonitoringSystem
+public FireMonitoringSystem: () ==> FireMonitoringSystem
+FireMonitoringSystem() == ();
+
+functions
+
+end FireMonitoringSystem
