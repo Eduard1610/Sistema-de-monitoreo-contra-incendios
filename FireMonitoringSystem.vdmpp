@@ -10,18 +10,32 @@
   @version 1.0
   @author
     - Durand Obando Eduardo Franshua 
-    - Franks
-    - César
-    - Italo
+    - Vilca Quispe Frank's Javier
+    - Garay Bedregal César Alejandro
+    - Velita Aguilar Italo Fabricio Bertrand
 */
 
 class FireMonitoringSystem
 
 types
+  -- Niveles de seguridad para el sistema
+  public SafetyLevel = <normal> | <peligro> | <alerta_critica>;
+
+  -- Tipos de sensores utilizados en el monitoreo
+  public SensorType = <temperatura> | <humedad> | <gases>;
+
+  -- Severidad del fuego que puede ser reportada
+  public FireSeverity = <bajo> | <moderado> | <extremo> | <alto>;
+
+  -- Acciones a tomar en caso de detección de riesgo
+  public Actions = <activar_sistema_riego> | <notificar_autoridades> | <evacuacion>;
+  
+
 
 values
 
 instance variables
+
 
 operations
 
