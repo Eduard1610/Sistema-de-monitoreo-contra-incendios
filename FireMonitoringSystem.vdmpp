@@ -18,6 +18,9 @@
 class FireMonitoringSystem
 
 types
+  -- ------------------------------------------------------------------------------------------
+  -- QUOTES
+
   -- Niveles de seguridad para el sistema
   public SafetyLevel = <normal> | <peligro> | <alerta_critica>;
 
@@ -29,8 +32,15 @@ types
 
   -- Acciones a tomar en caso de detección de riesgo
   public Actions = <activar_sistema_riego> | <notificar_autoridades> | <evacuacion>;
-  
 
+  -- ------------------------------------------------------------------------------------------
+  -- TOKENS  
+  
+  public SensorIDToken = Token;                -- Para identificar de manera única cada sensor
+  public NotificationToken = Token;            -- Para gestionar notificaciones enviadas a usuarios
+  public EmergencyContactToken = Token;        -- Para almacenar información de contacto en caso de emergencia
+  public ResponseTimeToken = Token;            -- Para medir el tiempo de respuesta ante alertas
+  public HistoricalDataToken = Token;          -- Para acceder a datos históricos almacenados en el sistema
 
 values
 
