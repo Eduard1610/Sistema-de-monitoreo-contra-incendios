@@ -59,6 +59,8 @@ instance variables
   public accion : Actions;
   -- Datos
   public listaDatos : seq of real;
+  -- Mapa de sensores
+  public SensorMap : map SensorIDToken to set of Sensor;
 
 inv len listaDatos = 5;
 
@@ -82,9 +84,42 @@ operations
     nivelSeguridad := initSeg;
     tipoSensor := initTyp;
     severidadIncendio := initSev;
+    -- Inicialización del mapa de sensores
+	  SensorMap := {|->};
+	
+
     accion := initAct;
   );
 
 functions
 
 end FireMonitoringSystem
+
+
+
+
+-- Clase creada para los sensores
+class Sensor
+
+types
+  public SensorIDToken = token;  -- Definición del token para ID de sensores
+  public SensorType = <temperatura> | <humedad> | <gases>;  -- Tipos de sensores
+
+instance variables
+  public sensorId : SensorIDToken;  -- Identificador del sensor
+  public tipo : SensorType;          -- Tipo de sensor
+  public valor : real;               -- Valor de la medición
+
+operations
+
+  public Sensor: SensorIDToken * SensorType * real ==> Sensor
+  Sensor(id, tipoSensor, valorMed) == 
+  (
+    sensorId := id;
+    tipo := tipoSensor;
+    valor := valorMed;
+  );
+
+functions
+
+end Sensor
