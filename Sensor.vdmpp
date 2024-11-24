@@ -1,0 +1,26 @@
+class Sensor
+
+types
+  public SensorType = <temperatura> | <monoxido> | <particulas_pm25> | <particulas_pm10> | <humedad> | <viento>;
+
+instance variables
+  public sensorId : SensorIDToken;
+  public tipo : SensorType;
+  public valor : real;
+
+operations
+  -- Constructor
+  public Sensor: SensorIDToken * SensorType * real ==> Sensor
+  Sensor(id, tipoSensor, valorMed) ==
+  (
+    sensorId := id;
+    tipo := tipoSensor;
+    valor := valorMed;
+  );
+
+  -- Actualizar valor
+  public UpdateValue: real ==> ()
+  UpdateValue(newValue) ==
+    valor := newValue;
+
+end Sensor

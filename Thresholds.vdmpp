@@ -1,0 +1,21 @@
+class Thresholds
+
+types
+  public SensorThreshold = map SensorType to real;
+
+instance variables
+  public thresholds : SensorThreshold := 
+    {<temperatura> |-> 40, <monoxido> |-> 50, <particulas_pm25> |-> 50, <particulas_pm10> |-> 75, <humedad> |-> 30, <viento> |-> 20};
+
+operations
+  -- Verificar si un valor excede el umbral
+  public IsCritical: SensorType * real ==> bool
+  IsCritical(sensorType, value) ==
+    return value >= thresholds(sensorType);
+
+  -- Actualizar un umbral específico
+  public UpdateThreshold: SensorType * real ==> ()
+  UpdateThreshold(sensorType, newThreshold) ==
+    thresholds(sensorType) := newThreshold;
+
+end Thresholds

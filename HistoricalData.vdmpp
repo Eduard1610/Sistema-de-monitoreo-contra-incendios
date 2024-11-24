@@ -1,0 +1,20 @@
+class HistoricalData
+
+types
+  public Entry = SensorIDToken * real;
+
+instance variables
+  public records : seq of Entry := [];
+
+operations
+  -- Agregar un registro
+  public AddRecord: SensorIDToken * real ==> ()
+  AddRecord(sensorId, value) ==
+    records := records ^ [mk_(sensorId, value)];
+
+  -- Obtener registros
+  public GetRecords: () ==> seq of Entry
+  GetRecords() ==
+    return records;
+
+end HistoricalData

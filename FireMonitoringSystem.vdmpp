@@ -1,125 +1,34 @@
-/**
-  FireMonitoringSystem.
-
-  <p>
-    Sistema de monitoreo que rastrea variables clave como la temperatura, 
-    la humedad del aire y otros factores meteorológicos (CO) para prevenir 
-    y gestionar incendios, en entornos forestales.
-  </p>
-
-  @version 1.0
-  @author
-    - Durand Obando Eduardo Franshua 
-    - Vilca Quispe Frank's Javier
-    - Garay Bedregal César Alejandro
-    - Velita Aguilar Italo Fabricio Bertrand
-    - Añazco Huamanquispe André Renzo
-*/
-
 class FireMonitoringSystem
 
 types
-  -- ------------------------------------------------------------------------------------------
-  -- QUOTES
-
-  -- Niveles de seguridad para el sistema
-  public SafetyLevel = <normal> | <peligro> | <alerta_critica>;
-
-  -- Tipos de sensores utilizados en el monitoreo
-  public SensorType = <temperatura> | <humedad> | <gases>;
-
-  -- Severidad del fuego que puede ser reportada
-  public FireSeverity = <bajo> | <moderado> | <extremo> | <alto>;
-
-  -- Acciones a tomar en caso de detección de riesgo
-  public Actions = <activar_sistema_riego> | <notificar_autoridades> | <evacuacion>;
-
-  -- ------------------------------------------------------------------------------------------
-  -- TOKENS  
-  
-  public SensorIDToken = token;                -- Para identificar de manera única cada sensor
-  public NotificationToken = token;            -- Para gestionar notificaciones enviadas a usuarios
-  public EmergencyContactToken = token;        -- Para almacenar información de contacto en caso de emergencia
-  public ResponseTimeToken = token;            -- Para medir el tiempo de respuesta ante alertas
-  public HistoricalDataToken = token;          -- Para acceder a datos históricos almacenados en el sistema
-
-values
+  public SafetyLevel = <moderado> | <alto> | <critico>;
+  public SensorType = <temperatura> | <monoxido> | <particulas_pm25> | <particulas_pm10> | <humedad> | <viento>;
 
 instance variables
-  -- Relacionado a los token
-  public sensorId : SensorIDToken;
-  public notificacionId : NotificationToken;
-  public emergenciaId : EmergencyContactToken;
-  public tiempoRespuestaId: ResponseTimeToken;
-  public datosHistoricosId : HistoricalDataToken;
-  -- Relacionado a quote
-  public nivelSeguridad : SafetyLevel;
-  public tipoSensor : SensorType;
-  public severidadIncendio : FireSeverity;
-  public accion : Actions;
-  -- Datos
-  public listaDatos : seq of real;
-  -- Mapa de sensores
-  public SensorMap : map SensorIDToken to set of Sensor;
-
-inv len listaDatos = 5;
+  public sensorMap : map SensorIDToken to Sensor := {|->}; -- Relación SensorID -> Sensor
+  public thresholds : Thresholds := new Thresholds(); -- Umbrales configurados
+  public dataLogger : HistoricalData := new HistoricalData();
 
 operations
+  -- Agregar un sensor al sistema
+  public AddSensor: Sensor ==> ()
+  AddSensor(sensor) ==
+    sensorMap := sensorMap munion {sensor.sensorId |-> sensor};
 
-  -- constructor for FireMonitoringSystem
-  public FireMonitoringSystem: 
-  SensorIDToken * NotificationToken * EmergencyContactToken * ResponseTimeToken * HistoricalDataToken * 
-  SafetyLevel * SensorType * FireSeverity * Actions * 
-  seq of real ==> FireMonitoringSystem
-  FireMonitoringSystem(newSen, newNot, newEme, newTie, newDat, initSeg, initTyp, initSev, initAct, initLis) == 
-  ( -- Iniciando datos
-    listaDatos := initLis;
-    -- Iniciando Tokens
-    sensorId := newSen;
-    notificacionId := newNot;
-    emergenciaId := newEme;
-    tiempoRespuestaId := newTie;
-    datosHistoricosId := newDat;
-    -- Iniciando Quotes
-    nivelSeguridad := initSeg;
-    tipoSensor := initTyp;
-    severidadIncendio := initSev;
-    -- Inicialización del mapa de sensores
-	  SensorMap := {|->};
-	
+  -- Detectar niveles críticos y emitir alertas
+  public AnalyzeData: () ==> ()
+  AnalyzeData() ==
+    for all id in set dom sensorMap do
+      let sensor = sensorMap(id) in
+        if thresholds.IsCritical(sensor.tipo, sensor.valor) then
+          EmitAlert(sensor.sensorId, sensor.tipo, sensor.valor);
 
-    accion := initAct;
+  -- Emitir una alerta basada en los datos del sensor
+  public EmitAlert: SensorIDToken * SensorType * real ==> ()
+  EmitAlert(sensorId, sensorType, value) ==
+  (
+    IO`println("ALERTA: Sensor " ^ sensorId ^ " detecta nivel crítico (" ^ sensorType ^ ") con valor: " ^ value);
+    dataLogger.AddRecord(sensorId, value);
   );
-
-functions
 
 end FireMonitoringSystem
-
-
-
-
--- Clase creada para los sensores
-class Sensor
-
-types
-  public SensorIDToken = token;  -- Definición del token para ID de sensores
-  public SensorType = <temperatura> | <humedad> | <gases>;  -- Tipos de sensores
-
-instance variables
-  public sensorId : SensorIDToken;  -- Identificador del sensor
-  public tipo : SensorType;          -- Tipo de sensor
-  public valor : real;               -- Valor de la medición
-
-operations
-
-  public Sensor: SensorIDToken * SensorType * real ==> Sensor
-  Sensor(id, tipoSensor, valorMed) == 
-  (
-    sensorId := id;
-    tipo := tipoSensor;
-    valor := valorMed;
-  );
-
-functions
-
-end Sensor
