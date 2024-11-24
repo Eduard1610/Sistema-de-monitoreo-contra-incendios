@@ -9,7 +9,29 @@ instance variables
   public thresholds : Thresholds := new Thresholds(); -- Umbrales configurados
   public dataLogger : HistoricalData := new HistoricalData();
 
+inv
+
+  -- Invariante 1: Los sensores deben tener identificadores únicos
+  dom sensorMap = elems dom sensorMap and
+
+  -- Invariante 2: Cada sensor en el mapa debe tener un tipo válido
+  (forall id in set dom sensorMap &
+    sensorMap(id).tipo in set {<temperatura>, <monoxido>, <particulas_pm25>, <particulas_pm10>, <humedad>, <viento>}) and
+
+  -- Invariante 3: El mapa de sensores no puede superar un límite razonable de sensores activos (ejemplo: 100)
+  card dom sensorMap <= 100;
+  
 operations
+  -- Constructor
+  public FireMonitoringSystem: () ==> FireMonitoringSystem
+  FireMonitoringSystem() ==
+  (
+    -- Inicialización vacía de sensores y componentes
+    sensorMap := {|->};
+    thresholds := new Thresholds();
+    dataLogger := new HistoricalData();
+  );
+
   -- Agregar un sensor al sistema
   public AddSensor: Sensor ==> ()
   AddSensor(sensor) ==
