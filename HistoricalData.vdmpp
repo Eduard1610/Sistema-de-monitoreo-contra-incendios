@@ -1,6 +1,7 @@
 class HistoricalData
 
 types
+  public SensorIDToken = token;
   public Entry = SensorIDToken * real;
 
 instance variables

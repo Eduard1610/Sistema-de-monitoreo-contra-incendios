@@ -1,6 +1,7 @@
 class FireMonitoringSystem
 
 types
+  public SensorIDToken = token;
   public SafetyLevel = <moderado> | <alto> | <critico>;
   public SensorType = <temperatura> | <monoxido> | <particulas_pm25> | <particulas_pm10> | <humedad> | <viento>;
 
@@ -12,7 +13,7 @@ instance variables
 inv
 
   -- Invariante 1: Los sensores deben tener identificadores únicos
-  dom sensorMap = elems dom sensorMap and
+  dom sensorMap = dom sensorMap and
 
   -- Invariante 2: Cada sensor en el mapa debe tener un tipo válido
   (forall id in set dom sensorMap &
@@ -38,19 +39,21 @@ operations
     sensorMap := sensorMap munion {sensor.sensorId |-> sensor};
 
   -- Detectar niveles críticos y emitir alertas
-  public AnalyzeData: () ==> ()
+  public AnalyzeData: () ==> bool
   AnalyzeData() ==
     for all id in set dom sensorMap do
       let sensor = sensorMap(id) in
         if thresholds.IsCritical(sensor.tipo, sensor.valor) then
-          EmitAlert(sensor.sensorId, sensor.tipo, sensor.valor);
+          return EmitAlert(sensor.sensorId, sensor.tipo, sensor.valor)
+        else
+          return false;
 
   -- Emitir una alerta basada en los datos del sensor
-  public EmitAlert: SensorIDToken * SensorType * real ==> ()
+  public EmitAlert: SensorIDToken * SensorType * real ==> bool
   EmitAlert(sensorId, sensorType, value) ==
   (
-    IO`println("ALERTA: Sensor " ^ sensorId ^ " detecta nivel crítico (" ^ sensorType ^ ") con valor: " ^ value);
     dataLogger.AddRecord(sensorId, value);
+    return true;
   );
 
 end FireMonitoringSystem

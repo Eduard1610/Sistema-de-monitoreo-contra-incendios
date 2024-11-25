@@ -1,6 +1,7 @@
 class Thresholds
 
 types
+  public SensorType = <temperatura> | <monoxido> | <particulas_pm25> | <particulas_pm10> | <humedad> | <viento>;
   public SensorThreshold = map SensorType to real;
 
 instance variables

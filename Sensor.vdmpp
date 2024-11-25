@@ -1,6 +1,7 @@
 class Sensor
 
 types
+  public SensorIDToken = token;
   public SensorType = <temperatura> | <monoxido> | <particulas_pm25> | <particulas_pm10> | <humedad> | <viento>;
 
 instance variables
